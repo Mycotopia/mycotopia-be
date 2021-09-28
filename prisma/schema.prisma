@@ -13,60 +13,60 @@ generator client {
 // Main user model.
 model User {
   id             String          @id @default(cuid())
-  userId         String          @unique
-  firstName      String
-  lastName       String
+  user_id         String          @unique
+  first_name      String
+  last_name       String
   email          String          @unique
   password       String
-  emailVerified  Boolean         @default(false)
-  isVerifiedUser     Boolean         @default(false)
-  isBanned       Boolean         @default(false)
+  email_verified  Boolean         @default(false)
+  is_verified_user     Boolean         @default(false)
+  is_banned       Boolean         @default(false)
   profile        Profile?
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-  signUpMetadata SignUpMetadata?
-  UserSessions   UserSessions[]
-  Posts          Posts[]
-  Recipe         Recipe[]
-  MediaFiles     MediaFiles[]
+  created_at      DateTime        @default(now())
+  updated_at      DateTime        @updatedAt
+  sign_up_metadata SignUpMetadata?
+  user_sessions   UserSessions[]
+  posts          Posts[]
+  recipe         Recipe[]
+  media_files     MediaFiles[]
 
-  @@index([id, userId])
+  @@index([id, user_id])
 }
 
 // Contains user's profile data.
 model Profile {
   id             String   @id @default(uuid())
-  user           User     @relation(fields: [userId], references: [id])
+  user           User     @relation(fields: [user_id], references: [id])
   desctiption    String   @default("")
   country        String?
-  profilePicture String?
-  userId         String
+  profile_picture String?
+  user_id         String
   unit           Units    @default(METRIC)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
 }
 
 // Created when the user signs up.
 model SignUpMetadata {
   id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  ipAddress String
-  userAgent String
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
+  created_at DateTime @default(now())
+  ip_address String
+  user_agent String
+  user      User     @relation(fields: [user_id], references: [id])
+  user_id    String
 }
 
 // Created when a user logs in.
 model UserSessions {
   id        String   @id @default(uuid())
   token     String
-  isValid   Boolean  @default(true)
-  ipAddress String
-  userAgent String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
+  is_valid   Boolean  @default(true)
+  ip_address String
+  user_agent String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  user      User     @relation(fields: [user_id], references: [id])
+  user_id    String
 }
 
 // Unit of measurement.
@@ -85,12 +85,12 @@ enum MediaFileType {
 // Media files (for all media files)
 model MediaFiles {
   id         String        @id @default(uuid())
-  fileType   MediaFileType
+  file_type   MediaFileType
   metafields Json?
-  user       User          @relation(fields: [userId], references: [id])
-  Posts      Posts[]
-  Recipe     Recipe[]
-  userId     String
+  user       User          @relation(fields: [user_id], references: [id])
+  posts      Posts[]
+  recipe     Recipe[]
+  user_id     String
 }
 
 // User posts
@@ -98,10 +98,10 @@ model Posts {
   id           String     @id @default(cuid())
   description  String
   metafields   Json?
-  user         User       @relation(fields: [userId], references: [id])
-  userId       String
-  media        MediaFiles @relation(fields: [mediaFilesId], references: [id])
-  mediaFilesId String
+  user         User       @relation(fields: [user_id], references: [id])
+  user_id       String
+  media        MediaFiles @relation(fields: [media_files_id], references: [id])
+  media_files_id String
 }
 
 // User recipes
@@ -111,8 +111,8 @@ model Recipe {
   body         String
   images       Json?
   metafields   Json?
-  user         User       @relation(fields: [userId], references: [id])
-  userId       String
-  media        MediaFiles @relation(fields: [mediaFilesId], references: [id])
-  mediaFilesId String
+  user         User       @relation(fields: [user_id], references: [id])
+  user_id       String
+  media        MediaFiles @relation(fields: [media_files_id], references: [id])
+  media_files_id String
 }

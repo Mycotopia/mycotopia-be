@@ -22,18 +22,18 @@ exports.signUp = async (req, res) => {
     // Only get email address. Query contains sensitive data.
     const { email } = await prisma.user.create({
         data: {
-            firstName,
-            lastName,
+            first_name: firstName,
+            last_name: lastName,
             email: emailAddress,
-            userId: username,
+            user_id: username,
             password,
             profile: {
                 create: {}
             },
-            signUpMetadata: {
+            sign_up_metadata: {
                 create: {
-                    ipAddress: ip,
-                    userAgent: userAgent
+                    ip_address: ip,
+                    user_agent: userAgent,
                 }
             }
         }

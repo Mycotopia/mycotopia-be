@@ -10,9 +10,10 @@ exports.logIn = async (req, res) => {
 
     const { id, "password": dbPasswordHash } = await prisma.user.findUnique({
         where: {
-            userId: username
+            user_id: username
         }
     }).catch(err => { console.error(err); return res.status(500); });
+
 
     if (auth.comparePassword(userPassword, dbPasswordHash) === true) {
         // Set cookie here once session is implemented.
