@@ -18,6 +18,7 @@ model User {
   lastName       String
   email          String          @unique
   password       String
+  emailVerified  Boolean         @default(false)
   isVerified     Boolean         @default(false)
   isBanned       Boolean         @default(false)
   profile        Profile?
@@ -37,6 +38,7 @@ model Profile {
   id             String   @id @default(uuid())
   user           User     @relation(fields: [userId], references: [id])
   desctiption    String   @default("")
+  country        String?
   profilePicture String?
   userId         String
   unit           Units    @default(METRIC)
