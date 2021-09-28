@@ -39,7 +39,7 @@ exports.signUp = async (req, res) => {
         }
     }).catch(err => {
         console.error(err);
-        return res.status(409).json({ "message": "Duplicate username or email." })
+        return res.status(409).json({ "message": "email or username already exists." })
     })
     return res.status(201).json({ email });
 }
