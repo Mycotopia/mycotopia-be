@@ -1,5 +1,6 @@
 'use-strict'
 const { prisma } = require("../services/db");
+const auth = require("../helpers/auth");
 
 module.exports = exports = {};
 
@@ -9,6 +10,10 @@ exports.signUp = async (req, res) => {
     // Repacking user name.
     const firstName = fullName.split(' ')[0];
     const lastName = fullName.split(' ').slice(1).join(' ');
+
+    // Hashing Password. TODO Move this to a middleware function.
+    password = auth.hashPassword(password);
+
     // Request IP address
     const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     // Request User-Agent.
