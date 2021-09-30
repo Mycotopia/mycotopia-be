@@ -6,6 +6,7 @@ const redis = require("redis");
 const connectRedis = require("connect-redis");
 const { signUp } = require("./controllers/signUp");
 const { logIn } = require("./controllers/logIn");
+const { logOut } = require("./controllers/logOut");
 
 const app = express();
 
@@ -42,6 +43,10 @@ app.post("/signup/", (req, res) => {
 
 app.post("/login/", (req, res) => {
     logIn(req, res);
+})
+
+app.post("/logout/", (req, res) => {
+    logOut(req, res);
 })
 
 app.listen(process.env.PORT || 3001, () => {
