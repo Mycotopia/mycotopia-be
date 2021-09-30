@@ -26,9 +26,9 @@ model User {
   updated_at       DateTime        @updatedAt
   sign_up_metadata SignUpMetadata?
   user_sessions    UserSessions[]
-  posts            Posts[]
-  recipe           Recipe[]
-  media_files      MediaFiles[]
+  posts            Post[]
+  recipes          Recipe[]
+  media_files      MediaFile[]
 
   @@index([id, user_id])
 }
@@ -83,36 +83,39 @@ enum MediaFileType {
 }
 
 // Media files (for all media files)
-model MediaFiles {
+model MediaFile {
   id         String        @id @default(uuid())
   file_type  MediaFileType
   metafields Json?
+  public_url String
   user       User          @relation(fields: [user_id], references: [id])
-  posts      Posts[]
-  recipe     Recipe[]
   user_id    String
+  posts      Post?         @relation(fields: [postId], references: [id])
+  postId     String
+  recipes    Recipe?       @relation(fields: [recipeId], references: [id])
+  recipeId   String
 }
 
 // User posts
-model Posts {
-  id             String     @id @default(cuid())
-  description    String
-  metafields     Json?
-  user           User       @relation(fields: [user_id], references: [id])
-  user_id        String
-  media          MediaFiles @relation(fields: [media_files_id], references: [id])
-  media_files_id String
+model Post {
+  id            String      @id @default(cuid())
+  description   String
+  metafields    Json?
+  user          User        @relation(fields: [user_id], references: [id])
+  user_id       String
+  media_file_id String
+  MediaFile     MediaFile[]
 }
 
 // User recipes
 model Recipe {
-  id             String     @id @default(cuid())
-  title          String
-  body           String
-  images         Json?
-  metafields     Json?
-  user           User       @relation(fields: [user_id], references: [id])
-  user_id        String
-  media          MediaFiles @relation(fields: [media_files_id], references: [id])
-  media_files_id String
+  id            String      @id @default(cuid())
+  title         String
+  body          String
+  images        Json?
+  metafields    Json?
+  user          User        @relation(fields: [user_id], references: [id])
+  user_id       String
+  media_file_id String
+  MediaFile     MediaFile[]
 }
