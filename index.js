@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
+const csurf = require("csurf");
 const redis = require("redis");
 const connectRedis = require("connect-redis");
 const { signUp } = require("./controllers/signUp");
@@ -9,6 +10,9 @@ const { logIn } = require("./controllers/logIn");
 const { logOut } = require("./controllers/logOut");
 
 const app = express();
+
+//CSRF Protection
+const csrfProtection = csurf();
 
 // Redis Store
 const RedisStore = connectRedis(session);
@@ -28,13 +32,13 @@ app.use(session({
     store: new RedisStore({ client: redisClient }),
     secret: 'process.env.SESSION_SECRET',
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie: { httpOnly: true }
 }));
-
+app.use(csrfProtection);
 
 app.get('/', (req, res) => {
-    res.send("Mycotopia Home Page.");
+    res.send(`Mycotopia Home Page. ${req.csrfToken()}`);
 })
 
 app.post("/signup/", (req, res) => {

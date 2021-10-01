@@ -7,7 +7,6 @@ module.exports = exports = {};
 exports.logOut = (req, res) => {
     const body = req.body;
     const session = req.session;
-    console.log(session);
 
     if (session.user_id) {
         req.session.destroy(async err => {
@@ -19,7 +18,6 @@ exports.logOut = (req, res) => {
                     is_valid: false
                 }
             }).then(sessionRecord => {
-                console.log(sessionRecord);
                 res.status(200).json({});
             }).catch(err => {
                 console.error(err);
