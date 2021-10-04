@@ -37,6 +37,8 @@ app.use(session({
 }));
 app.use(csrfProtection);
 
+// Routes
+
 app.get('/', (req, res) => {
     res.send(`Mycotopia Home Page. ${req.csrfToken()}`);
 })
@@ -51,6 +53,10 @@ app.post("/login/", (req, res) => {
 
 app.post("/logout/", (req, res) => {
     logOut(req, res);
+})
+
+app.get("/x-csrf/", (req, res) => {
+    res.status(200).json({ "_csrf": req.csrfToken() });
 })
 
 app.listen(process.env.PORT || 3001, () => {
