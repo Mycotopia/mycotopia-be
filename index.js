@@ -20,14 +20,14 @@ const redisClient = redis.createClient({
     host: "localhost",
     port: 6379
 });
-
-redisClient.on('error', () => { console.log('error') });
-redisClient.on('connect', () => { console.log('connected') });
+redisClient.on('error', () => { console.log('Cannot connect to redis.') });
+redisClient.on('connect', () => { console.log('Connected to redis.') });
 
 
 // Middlewares
 app.use(express.json());
-app.use(cookieParser())
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(session({
     store: new RedisStore({ client: redisClient }),
     secret: 'process.env.SESSION_SECRET',
