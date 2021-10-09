@@ -8,6 +8,7 @@ const connectRedis = require("connect-redis");
 const { signUp } = require("./controllers/signUp");
 const { logIn } = require("./controllers/logIn");
 const { logOut } = require("./controllers/logOut");
+const { createPost } = require("./controllers/posts");
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use(cookieParser());
 app.use(session({
     store: new RedisStore({ client: redisClient }),
     secret: 'process.env.SESSION_SECRET',
+    name: "user_session",
     resave: false,
     saveUninitialized: true,
     cookie: { httpOnly: true }
@@ -57,6 +59,10 @@ app.post("/logout/", (req, res) => {
 
 app.get("/x-csrf/", (req, res) => {
     res.status(200).json({ "_csrf": req.csrfToken() });
+})
+
+app.post("/posts/create", (req, res) => {
+    createPost(req, res);
 })
 
 app.listen(process.env.PORT || 3001, () => {
