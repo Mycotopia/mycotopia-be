@@ -1,10 +1,9 @@
 'use-strict'
 
-const { prisma } = require("../services/db");
+import { prisma } from "../services/db.js";
 
-module.exports = exports = {};
 
-exports.logOut = (req, res) => {
+export const logOut = (req, res) => {
     const body = req.body;
     const session = req.session;
 

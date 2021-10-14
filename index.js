@@ -1,14 +1,17 @@
-require('dotenv').config();
-const express = require('express');
-const cookieParser = require("cookie-parser");
-const session = require("express-session");
-const csurf = require("csurf");
-const redis = require("redis");
-const connectRedis = require("connect-redis");
-const { signUp } = require("./controllers/signUp");
-const { logIn } = require("./controllers/logIn");
-const { logOut } = require("./controllers/logOut");
-const { createPost } = require("./controllers/posts");
+'use-strict'
+
+import dotenv from "dotenv";
+dotenv.config();
+import express from "express";
+import cookieParser from "cookie-parser";
+import session from "express-session";
+import csurf from "csurf";
+import redis from "redis";
+import connectRedis from "connect-redis";
+import { signUp } from "./controllers/signUp.js";
+import { logIn } from "./controllers/logIn.js";
+import { logOut } from "./controllers/logOut.js";
+import { createPost } from "./controllers/posts/index.js";
 
 const app = express();
 

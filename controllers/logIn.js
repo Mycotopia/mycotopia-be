@@ -1,11 +1,10 @@
 'use-strict'
 
-const { prisma } = require("../services/db");
-const auth = require("../helpers/auth");
+import { prisma } from "../services/db.js";
+import { comparePassword } from "../helpers/auth.js";
 
-module.exports = exports = {};
 
-exports.logIn = async (req, res) => {
+export const logIn = async (req, res) => {
 
     let session = req.session;
     if (session.user_id) {
@@ -30,7 +29,7 @@ exports.logIn = async (req, res) => {
 
             const { id, "password": dbPasswordHash } = user;
 
-            if (auth.comparePassword(userPassword, dbPasswordHash) === true) {
+            if (comparePassword(userPassword, dbPasswordHash) === true) {
 
                 const { "id": userSessionsId } = await prisma.userSessions.create({
                     data: {
