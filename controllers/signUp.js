@@ -1,10 +1,9 @@
 'use-strict'
-const { prisma } = require("../services/db");
-const auth = require("../helpers/auth");
+import { prisma } from "../services/db.js";
+import { hashPassword } from "../helpers/auth.js";
 
-module.exports = exports = {};
 
-exports.signUp = async (req, res) => {
+const signUp = async (req, res) => {
     let { fullName, username, emailAddress, password } = req.body;
 
     // Repacking user name.
@@ -12,7 +11,7 @@ exports.signUp = async (req, res) => {
     const lastName = fullName.split(' ').slice(1).join(' ');
 
     // Hashing Password. TODO Move this to a middleware function.
-    password = auth.hashPassword(password);
+    password = hashPassword(password);
 
     // Request IP address
     const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
@@ -43,3 +42,5 @@ exports.signUp = async (req, res) => {
     })
     return res.status(201).json({ email });
 }
+
+export { signUp };

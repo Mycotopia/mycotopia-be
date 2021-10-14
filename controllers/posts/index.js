@@ -1,11 +1,11 @@
 'use-strict'
 
-const util = require("util");
-const multer = require("multer");
-const sharp = require("sharp");
-const fs = require("fs");
+import util from "util";
+import multer from "multer";
+import sharp from "sharp";
+import fs from "fs";
 
-const createPost = async (req, res) => {
+export const createPost = async (req, res) => {
     const storage = multer.memoryStorage();
     const upload = multer({
         storage: storage,
@@ -34,7 +34,7 @@ const createPost = async (req, res) => {
 
             let promises = req.files.map(file => {
                 return new Promise(async (resolve, reject) => {
-                    await sharp(file.buffer).jpeg({ quality: 30 }).toFile('processed_images/' + file.originalname)
+                    await sharp(file.buffer).jpeg({ mozjpeg: true }).toFile('processed_images/' + file.originalname)
                         .then(ctx => {
                             resolve(true);
                         })
@@ -60,4 +60,3 @@ const createPost = async (req, res) => {
 }
 
 
-module.exports = { createPost };
