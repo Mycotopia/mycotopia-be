@@ -49,10 +49,6 @@ app.get('/', (req, res) => {
 })
 
 
-app.get("/x-csrf/", (req, res) => {
-    res.status(200).json({ "_csrf": req.csrfToken() });
-})
-
 app.post("/posts/create", (req, res) => {
     createPost(req, res);
 })
