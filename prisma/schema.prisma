@@ -22,6 +22,8 @@ model User {
   is_verified_user Boolean         @default(false)
   is_banned        Boolean         @default(false)
   profile          Profile?
+  following        User[]          @relation("follows")
+  followers        User[]          @relation("follows")
   created_at       DateTime        @default(now())
   updated_at       DateTime        @updatedAt
   sign_up_metadata SignUpMetadata?
@@ -40,7 +42,7 @@ model Profile {
   desctiption     String   @default("")
   country         String?
   profile_picture String?
-  user_id         String
+  user_id         String   @unique
   unit            Units    @default(METRIC)
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
@@ -53,7 +55,7 @@ model SignUpMetadata {
   ip_address String
   user_agent String
   user       User     @relation(fields: [user_id], references: [id])
-  user_id    String
+  user_id    String   @unique
 }
 
 // Created when a user logs in.

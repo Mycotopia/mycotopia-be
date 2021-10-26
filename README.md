@@ -2,6 +2,10 @@
 Express backend for Mycotopia
 
 
+## Dev Commands
+Run Database: `docker run --rm --name postgres-mycotopia -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres:13-alpine`
+Run Redis: `docker run --rm --name some-redis -p 6379:6379 -d redis:alpine`
+
 ## API Docs
 
 ### SignUp Route
