@@ -8,10 +8,8 @@ import session from "express-session";
 import csurf from "csurf";
 import redis from "redis";
 import connectRedis from "connect-redis";
-import { signUp } from "./controllers/signUp.js";
-import { logIn } from "./controllers/logIn.js";
-import { logOut } from "./controllers/logOut.js";
 import { createPost } from "./controllers/posts/index.js";
+import router from "./routes/index.js";
 
 const app = express();
 
@@ -44,21 +42,12 @@ app.use(csrfProtection);
 
 // Routes
 
+app.use("/", router);
+
 app.get('/', (req, res) => {
     res.send(`Mycotopia Home Page. ${req.csrfToken()}`);
 })
 
-app.post("/signup/", (req, res) => {
-    signUp(req, res);
-})
-
-app.post("/login/", (req, res) => {
-    logIn(req, res);
-})
-
-app.post("/logout/", (req, res) => {
-    logOut(req, res);
-})
 
 app.get("/x-csrf/", (req, res) => {
     res.status(200).json({ "_csrf": req.csrfToken() });
