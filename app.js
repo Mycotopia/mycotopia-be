@@ -49,8 +49,4 @@ app.get('/', (req, res) => {
 })
 
 
-app.post("/posts/create", (req, res) => {
-    createPost(req, res);
-})
-
 export default app;
