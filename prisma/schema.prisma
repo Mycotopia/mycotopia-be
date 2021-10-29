@@ -88,36 +88,34 @@ enum MediaFileType {
 model MediaFile {
   id         String        @id @default(uuid())
   file_type  MediaFileType
-  metafields Json?
+  metafields Json?         @default("{}")
   public_url String
-  user       User          @relation(fields: [user_id], references: [id])
+  user       User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id    String
-  posts      Post?         @relation(fields: [postId], references: [id])
-  postId     String
-  recipes    Recipe?       @relation(fields: [recipeId], references: [id])
-  recipeId   String
+  posts      Post?         @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  post_id    String?
+  recipes    Recipe?       @relation(fields: [recipe_id], references: [id], onDelete: Cascade)
+  recipe_id  String?
 }
 
 // User posts
 model Post {
   id            String      @id @default(cuid())
   description   String
-  metafields    Json?
+  metafields    Json?       @default("{}")
   user          User        @relation(fields: [user_id], references: [id])
   user_id       String
-  media_file_id String
-  MediaFile     MediaFile[]
+  media_files   MediaFile[]
 }
 
 // User recipes
 model Recipe {
-  id            String      @id @default(cuid())
-  title         String
-  body          String
-  images        Json?
-  metafields    Json?
-  user          User        @relation(fields: [user_id], references: [id])
-  user_id       String
-  media_file_id String
-  MediaFile     MediaFile[]
+  id          String      @id @default(cuid())
+  title       String
+  body        String
+  images      Json?       @default("{}")
+  metafields  Json?       @default("{}")
+  user        User        @relation(fields: [user_id], references: [id])
+  user_id     String
+  media_files MediaFile[]
 }
