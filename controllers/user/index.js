@@ -22,7 +22,7 @@ export const getUserProfile = async (req, res) => {
             is_verified_user: true,
             profile: {
                 select: {
-                    desctiption: true,
+                    description: true,
                     profile_picture: true
                 }
             },
@@ -39,8 +39,10 @@ export const getUserProfile = async (req, res) => {
     })
 
     // Repacking the data
+    user.user_name = user.user_id;
+    delete user["user_id"];
     user.profile_picture = user.profile.profile_picture;
-    user.description = user.profile.description || "";
+    user.description = user.profile.description;
     delete user["profile"];
     user.following_count = user._count.following;
     user.followers_count = user._count.followers;
@@ -53,5 +55,119 @@ export const getUserProfile = async (req, res) => {
     }
 
     res.status(200).json({ ...user });
-}
+};
 
+
+export const getUserFollowing = async (req, res) => {
+    const user_name = req.params.user_name;
+
+    if (!user_name) {
+        return res.status(400).json({ "status": "Bad Request." })
+    }
+
+    const following_data = await prisma.user.findFirst({
+        where: {
+            user_id: user_name,
+            is_banned: false
+        },
+        select: {
+            _count: {
+                select: {
+                    following: true
+                }
+            },
+            following: {
+                select: {
+                    user_id: true,
+                    first_name: true,
+                    last_name: true,
+                    profile: {
+                        select: {
+                            description: true,
+                            profile_picture: true
+                        }
+                    }
+                }
+            }
+        }
+    }).catch(err => {
+        console.error(err);
+        return res.status(500).json({ "status": "Internal Server Error." });
+    });
+
+    if (!following_data) {
+        // If user is not found in the database.
+
+        return res.status(404).json({ "status": "User Not Found." });
+    } else if (following_data) {
+        // Repacking the data
+        following_data.following.map(user => {
+            user.user_name = user.user_id;
+            delete user["user_id"];
+            user.profile_picture = user.profile.profile_picture;
+            user.description = user.profile.description;
+            delete user["profile"];
+
+            return user;
+        })
+
+        return res.status(200).json({ ...following_data });
+    }
+};
+
+export const getUserFollowers = async (req, res) => {
+    const user_name = req.params.user_name;
+
+    if (!user_name) {
+        return res.status(400).json({ "status": "Bad Request." })
+    }
+
+    const followers_data = await prisma.user.findFirst({
+        where: {
+            user_id: user_name,
+            is_banned: false
+        },
+        select: {
+            _count: {
+                select: {
+                    followers: true
+                }
+            },
+            followers: {
+                select: {
+                    user_id: true,
+                    first_name: true,
+                    last_name: true,
+                    profile: {
+                        select: {
+                            description: true,
+                            profile_picture: true
+                        }
+                    }
+                }
+            }
+        }
+    }).catch(err => {
+        console.error(err);
+        return res.status(500).json({ "status": "Internal Server Error." });
+    });
+
+    if (!followers_data) {
+        // If user is not found in the database.
+
+        return res.status(404).json({ "status": "User Not Found." });
+    } else if (followers_data) {
+        // Repacking the data
+        followers_data.followers.map(user => {
+            user.user_name = user.user_id;
+            delete user["user_id"];
+            user.profile_picture = user.profile.profile_picture;
+            user.description = user.profile.description;
+            delete user["profile"];
+
+            return user;
+        })
+
+        return res.status(200).json({ ...followers_data });
+    }
+};
