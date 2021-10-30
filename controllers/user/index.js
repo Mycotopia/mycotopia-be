@@ -122,5 +122,52 @@ export const getUserFollowers = async (req, res) => {
         return res.status(400).json({ "status": "Bad Request." })
     }
 
+    const followers_data = await prisma.user.findFirst({
+        where: {
+            user_id: user_name,
+            is_banned: false
+        },
+        select: {
+            _count: {
+                select: {
+                    followers: true
+                }
+            },
+            followers: {
+                select: {
+                    user_id: true,
+                    first_name: true,
+                    last_name: true,
+                    profile: {
+                        select: {
+                            description: true,
+                            profile_picture: true
+                        }
+                    }
+                }
+            }
+        }
+    }).catch(err => {
+        console.error(err);
+        return res.status(500).json({ "status": "Internal Server Error." });
+    });
 
+    if (!followers_data) {
+        // If user is not found in the database.
+
+        return res.status(404).json({ "status": "User Not Found." });
+    } else if (followers_data) {
+        // Repacking the data
+        followers_data.followers.map(user => {
+            user.user_name = user.user_id;
+            delete user["user_id"];
+            user.profile_picture = user.profile.profile_picture;
+            user.description = user.profile.description;
+            delete user["profile"];
+
+            return user;
+        })
+
+        return res.status(200).json({ ...followers_data });
+    }
 };
