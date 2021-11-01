@@ -6,9 +6,8 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import csurf from "csurf";
-import redis from "redis";
+import redisClient from "./services/redisClient.js";
 import connectRedis from "connect-redis";
-import { createPost } from "./controllers/posts/index.js";
 import router from "./routes/index.js";
 
 const app = express();
@@ -18,10 +17,6 @@ const csrfProtection = csurf();
 
 // Redis Store
 const RedisStore = connectRedis(session);
-const redisClient = redis.createClient({
-    host: "localhost",
-    port: 6379
-});
 redisClient.on('error', () => { console.log('Cannot connect to redis.') });
 redisClient.on('connect', () => { console.log('Connected to redis.') });
 
