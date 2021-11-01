@@ -6,6 +6,7 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import csurf from "csurf";
+import helmet from "helmet";
 import redisClient from "./services/redisClient.js";
 import connectRedis from "connect-redis";
 import router from "./routes/index.js";
@@ -22,6 +23,7 @@ redisClient.on('connect', () => { console.log('Connected to redis.') });
 
 
 // Middlewares
+app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
