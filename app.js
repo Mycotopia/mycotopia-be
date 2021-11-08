@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import csurf from "csurf";
 import helmet from "helmet";
+import cors from "cors";
 import redisClient from "./services/redisClient.js";
 import connectRedis from "connect-redis";
 import router from "./routes/index.js";
@@ -21,6 +22,11 @@ const RedisStore = connectRedis(session);
 redisClient.on('error', () => { console.log('Cannot connect to redis.') });
 redisClient.on('connect', () => { console.log('Connected to redis.') });
 
+// CORS Config
+const cors_config = {
+    origin: "http://localhost:3000",
+    credentials: true
+}
 
 // Middlewares
 app.use(helmet());
@@ -36,6 +42,7 @@ app.use(session({
     cookie: { httpOnly: true }
 }));
 app.use(csrfProtection);
+app.use(cors(cors_config));
 
 // Routes
 
