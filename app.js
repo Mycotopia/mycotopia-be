@@ -33,16 +33,16 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(cors(cors_config));
 app.use(session({
     store: new RedisStore({ client: redisClient }),
     secret: 'process.env.SESSION_SECRET',
     name: "user_session",
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: { httpOnly: true }
 }));
 app.use(csrfProtection);
-app.use(cors(cors_config));
 
 // Routes
 

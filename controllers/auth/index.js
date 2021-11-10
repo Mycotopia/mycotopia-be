@@ -91,11 +91,11 @@ export const logIn = async (req, res) => {
 
                 return res.status(200).json({ "message": "success" });
             } else {
-                return res.status(401).json({ "message": "Wrong username or password." })
+                return res.status(404).json({ "message": "Wrong username or password." })
             }
         }).catch(err => {
             console.error(err);
-            res.status(404).json({ "message": "User does not exist." });
+            res.status(404).json({ "message": "Wrong username or password." });
             return
         });
     }
